@@ -54,10 +54,24 @@ const boxVariants = {
 //varuants는 부모가 가진 motion을 자식들에게도 복붙해줌
 // 현재 자식과 부모는 같은 start, end를 가지고 있음
 // 자식들은 부모의 intial 값과 animate 값을 상속함
+
+//whileHover 호버 제스처가 인식되는 동안 애니메이션할 속성 또는 변형 레이블
+// whileTap 컴포넌트를 누르고 있는 동안 애니메이션할 속성 또는 변형 레이블
+// drag 끌기를 활성화
+// whileDrag 드래그 제스처가 인식되는 동안 애니메이션할 속성 또는 변형 레이블
 function App() {
   return (
     <Wrapper>
-      <Box variants={boxVariants} whileHover="hover" whileTap="click" />
+      <Box
+        drag
+        variants={boxVariants}
+        whileHover="hover"
+        whileDrag={{
+          backgroundColor: "rgb(112, 111, 211)",
+          transition: { duration: 10 },
+        }}
+        whileTap="click"
+      />
     </Wrapper>
   );
 }
