@@ -24,6 +24,14 @@ const Box = styled(motion.div)`
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
+// Variants은 컴포넌트가 가질 수 있는 미리 정의된 시각적 state
+// start/ end 일수도 있고 다른 이름을 가질 수도 있음
+// props를 넣어서 쓰기 때문에 내 코드를 깔금하게 정리 가능
+const myVars = {
+  start: { scale: 0 },
+  end: { scale: 1, rotateZ: 360, transition: { type: "spring", delay: 0.5 } },
+};
+
 // spring이라는 튕기는 요소가 기본적으로 들어있음
 // initial 초기값 에니메이션의 초기 스타일
 // animate 최종 스타일
@@ -31,11 +39,7 @@ const Box = styled(motion.div)`
 function App() {
   return (
     <Wrapper>
-      <Box
-        transition={{ type: "spring", delay: 0.5 }}
-        initial={{ scale: 0 }}
-        animate={{ scale: 1, rotateZ: 360 }}
-      />
+      <Box variants={myVars} initial="start" animate="end" />
     </Wrapper>
   );
 }
