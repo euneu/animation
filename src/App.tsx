@@ -19,9 +19,7 @@ const Wrapper = styled.div`
 const Box = styled(motion.div)`
   width: 200px;
   height: 200px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: white;
   border-radius: 30px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
@@ -47,34 +45,11 @@ const Circle = styled(motion.div)`
 // staggerChildren : 하위 컴포넌트의 애니메이션에 지속 시간(초)만큼 시차를 둘 수 있다
 // 예를 들어, staggerChildren이 0.01이면 첫 번째 자식은 0초, 두 번째 자식은 0.01초, 세 번째 자식은 0.02초 지연되는 식
 const boxVariants = {
-  start: {
-    opacity: 0,
-    scale: 0.5,
-  },
-  end: {
-    scale: 1,
-    opacity: 1,
-    transition: {
-      type: "spring",
-      duration: 0.5,
-      bounce: 0.5,
-      delayChildren: 0.5,
-      staggerChildren: 0.2,
-    },
-  },
+  hover: { scale: 1.5, rotateZ: 90 },
+  click: { scale: 1, borderRadius: "100px" },
 };
 
 //x,y는 motion에서만 사용 되고 좌표를 나타냄
-const circleVariants = {
-  start: {
-    opacity: 0,
-    y: 0,
-  },
-  end: {
-    opacity: 1,
-    y: 1,
-  },
-};
 
 //varuants는 부모가 가진 motion을 자식들에게도 복붙해줌
 // 현재 자식과 부모는 같은 start, end를 가지고 있음
@@ -82,12 +57,7 @@ const circleVariants = {
 function App() {
   return (
     <Wrapper>
-      <Box variants={boxVariants} initial="start" animate="end">
-        <Circle variants={circleVariants} />
-        <Circle variants={circleVariants} />
-        <Circle variants={circleVariants} />
-        <Circle variants={circleVariants} />
-      </Box>
+      <Box variants={boxVariants} whileHover="hover" whileTap="click" />
     </Wrapper>
   );
 }
