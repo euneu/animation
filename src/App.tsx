@@ -19,27 +19,75 @@ const Wrapper = styled.div`
 const Box = styled(motion.div)`
   width: 200px;
   height: 200px;
-  background-color: white;
-  border-radius: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 30px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
 // Variants은 컴포넌트가 가질 수 있는 미리 정의된 시각적 state
 // start/ end 일수도 있고 다른 이름을 가질 수도 있음
 // props를 넣어서 쓰기 때문에 내 코드를 깔금하게 정리 가능
-const myVars = {
-  start: { scale: 0 },
-  end: { scale: 1, rotateZ: 360, transition: { type: "spring", delay: 0.5 } },
-};
-
 // spring이라는 튕기는 요소가 기본적으로 들어있음
 // initial 초기값 에니메이션의 초기 스타일
 // animate 최종 스타일
 
+const Circle = styled(motion.div)`
+  background-color: white;
+  height: 70px;
+  width: 70px;
+  place-self: center;
+  border-radius: 35px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+`;
+
+// 자식요소의 딜레이까지 조절할 수 있음
+// delayChildren :  딜레이 시간(초) 후에 하위 애니메이션이 시작
+// staggerChildren : 하위 컴포넌트의 애니메이션에 지속 시간(초)만큼 시차를 둘 수 있다
+// 예를 들어, staggerChildren이 0.01이면 첫 번째 자식은 0초, 두 번째 자식은 0.01초, 세 번째 자식은 0.02초 지연되는 식
+const boxVariants = {
+  start: {
+    opacity: 0,
+    scale: 0.5,
+  },
+  end: {
+    scale: 1,
+    opacity: 1,
+    transition: {
+      type: "spring",
+      duration: 0.5,
+      bounce: 0.5,
+      delayChildren: 0.5,
+      staggerChildren: 0.2,
+    },
+  },
+};
+
+//x,y는 motion에서만 사용 되고 좌표를 나타냄
+const circleVariants = {
+  start: {
+    opacity: 0,
+    y: 0,
+  },
+  end: {
+    opacity: 1,
+    y: 1,
+  },
+};
+
+//varuants는 부모가 가진 motion을 자식들에게도 복붙해줌
+// 현재 자식과 부모는 같은 start, end를 가지고 있음
+// 자식들은 부모의 intial 값과 animate 값을 상속함
 function App() {
   return (
     <Wrapper>
-      <Box variants={myVars} initial="start" animate="end" />
+      <Box variants={boxVariants} initial="start" animate="end">
+        <Circle variants={circleVariants} />
+        <Circle variants={circleVariants} />
+        <Circle variants={circleVariants} />
+        <Circle variants={circleVariants} />
+      </Box>
     </Wrapper>
   );
 }
