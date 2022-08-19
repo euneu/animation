@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { motion } from "framer-motion";
-import { useRef } from "react";
+import { motion, useMotionValue } from "framer-motion";
+import { useEffect, useRef } from "react";
 
 //framer motion 설치
 // npm i framer-motion
@@ -72,21 +72,16 @@ const boxVariants = {
 // dragSnapToOrigin 드래그 놓으면 가운데로 돌아감
 // dragElastic: DragElastic
 // 외부 제약 조건에서 허용되는 이동 정도. 0 = 움직임 없음, 1 = 전체 움직임. 기본 0.5
+
+// MotionValue 애니메이션 값의 상태와 속도를 추적
+// style x 좌표가 바뀔 떄마다 Motionvalue x 값 업데이트됨
+// motionvalue는 state가 아니다 값이 바뀌어도 재랜더링 되지 않음
+// x.set(값)-> useMotionValue을 업데이트, x.get()-> useMotionValue 읽어 옴
 function App() {
-  const biggerBoxRef = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
   return (
     <Wrapper>
-      <BiggerBox ref={biggerBoxRef}>
-        <Box
-          drag
-          dragSnapToOrigin
-          dragElastic={1}
-          dragConstraints={biggerBoxRef}
-          variants={boxVariants}
-          whileHover="hover"
-          whileTap="click"
-        />
-      </BiggerBox>
+      <Box style={{ x: x }} drag="x" dragSnapToOrigin />
     </Wrapper>
   );
 }
