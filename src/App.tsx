@@ -1,96 +1,50 @@
 import styled from "styled-components";
-import { motion, useMotionValue, useTransform } from "framer-motion";
-import { useScroll } from "framer-motion";
-import { useEffect } from "react";
-
-//framer motion 설치
-// npm i framer-motion
-// import { motion } from "framer-motion";
-// <div></div> 이렇게 사용하면 안 되고 <motion.div></motion.div> 이렇게 사용해야 함
+import { motion } from "framer-motion";
 
 const Wrapper = styled(motion.div)`
-  height: 300vh;
+  height: 100vh;
   width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
-// 애니메이트 된 스타일 컴포넌트를 어떻게 가지냐면
-// 이렇게 바꿉니다
-const Box = styled(motion.div)`
-  width: 200px;
-  height: 200px;
-  background-color: rgba(255, 255, 255, 1);
-  border-radius: 40px;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+const Svg = styled.svg`
+  width: 300px;
+  height: 300px;
+  color: white;
+  path {
+    stroke: white;
+    stroke-width: 2;
+  }
 `;
 
-// Variants은 컴포넌트가 가질 수 있는 미리 정의된 시각적 state
-// start/ end 일수도 있고 다른 이름을 가질 수도 있음
-// props를 넣어서 쓰기 때문에 내 코드를 깔금하게 정리 가능
-// spring이라는 튕기는 요소가 기본적으로 들어있음
-// initial 초기값 에니메이션의 초기 스타일
-// animate 최종 스타일
-
-// 자식요소의 딜레이까지 조절할 수 있음
-// delayChildren :  딜레이 시간(초) 후에 하위 애니메이션이 시작
-// staggerChildren : 하위 컴포넌트의 애니메이션에 지속 시간(초)만큼 시차를 둘 수 있다
-// 예를 들어, staggerChildren이 0.01이면 첫 번째 자식은 0초, 두 번째 자식은 0.01초, 세 번째 자식은 0.02초 지연되는 식
-const boxVariants = {
-  hover: { rotateZ: 90 },
-  click: { borderRadius: "100px" },
+const svg = {
+  start: { pathLength: 0, fill: "rgba(255,255,255,0)" },
+  end: {
+    fill: "rgba(255,255,255,1)",
+    pathLength: 1,
+    // 여기에 trasition을 사용하면 fill이나 pathLength이나 똑같은 duration을 가지게 됨
+    // 따로 각 타이밍을 주고 싶으면 아래
+  },
 };
 
-//x,y는 motion에서만 사용 되고 좌표를 나타냄
-
-//varuants는 부모가 가진 motion을 자식들에게도 복붙해줌
-// 현재 자식과 부모는 같은 start, end를 가지고 있음
-// 자식들은 부모의 intial 값과 animate 값을 상속함
-
-//whileHover 호버 제스처가 인식되는 동안 애니메이션할 속성 또는 변형 레이블
-// whileTap 컴포넌트를 누르고 있는 동안 애니메이션할 속성 또는 변형 레이블
-// drag 끌기를 활성화
-// whileDrag 드래그 제스처가 인식되는 동안 애니메이션할 속성 또는 변형 레이블
-
-//drag = x ,y 하면 x 축으로만 움직이고 y축으로만 움직임
-
-//dragConstraints
-// 허용된 드래그 가능 영역에 제약 조건을 적용
-
-// ref 이용
-// dragSnapToOrigin 드래그 놓으면 가운데로 돌아감
-// dragElastic: DragElastic
-// 외부 제약 조건에서 허용되는 이동 정도. 0 = 움직임 없음, 1 = 전체 움직임. 기본 0.5
-
-// MotionValue 애니메이션 값의 상태와 속도를 추적
-// style x 좌표가 바뀔 떄마다 Motionvalue x 값 업데이트됨
-// motionvalue는 state가 아니다 값이 바뀌어도 재랜더링 되지 않음
-// x.set(값)-> useMotionValue을 업데이트, x.get()-> useMotionValue 읽어 옴
-
-// x 값이 -800 일때 sacle 2를 받고 싶고, x 값이 0 일땐 1, 800일떈 0
-// 점진적으로 다 얻고 싶음 => transformation
-// 그래서 사용하는거 useTransform
-// input과 output은 반드시 같은 배열 크기를 가져야 함
-// useScroll 스크롤 할 때마다 업데이트 되는 motionvalue 리턴 (number)
 function App() {
-  const x = useMotionValue(0);
-  const rotateZ = useTransform(x, [-800, 800], [-360, 360]);
-  const gradient = useTransform(
-    x,
-    [-800, 0, 800],
-    [
-      "linear-gradient(135deg, rgb(0, 24, 238), rgb(0, 111, 238))",
-      "linear-gradient(135deg, rgb(238, 0, 153), rgb(221, 0, 238))",
-      "linear-gradient(135deg, rgb(0, 238, 99), rgb(194, 238, 0))",
-    ]
-  );
-  const { scrollYProgress } = useScroll();
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 5]);
-
   return (
-    <Wrapper style={{ background: gradient }}>
-      <Box style={{ x, rotateZ, scale }} drag="x" dragSnapToOrigin />
+    <Wrapper>
+      <Svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+        <motion.path
+          variants={svg}
+          initial="start"
+          animate="end"
+          //특정한 property의 시간을 지정하는 법
+          transition={{
+            default: { duration: 5 },
+            fill: { duration: 1, delay: 3 },
+          }}
+          d="M224 373.12c-25.24-31.67-40.08-59.43-45-83.18-22.55-88 112.61-88 90.06 0-5.45 24.25-20.29 52-45 83.18zm138.15 73.23c-42.06 18.31-83.67-10.88-119.3-50.47 103.9-130.07 46.11-200-18.85-200-54.92 0-85.16 46.51-73.28 100.5 6.93 29.19 25.23 62.39 54.43 99.5-32.53 36.05-60.55 52.69-85.15 54.92-50 7.43-89.11-41.06-71.3-91.09 15.1-39.16 111.72-231.18 115.87-241.56 15.75-30.07 25.56-57.4 59.38-57.4 32.34 0 43.4 25.94 60.37 59.87 36 70.62 89.35 177.48 114.84 239.09 13.17 33.07-1.37 71.29-37.01 86.64zm47-136.12C280.27 35.93 273.13 32 224 32c-45.52 0-64.87 31.67-84.66 72.79C33.18 317.1 22.89 347.19 22 349.81-3.22 419.14 48.74 480 111.63 480c21.71 0 60.61-6.06 112.37-62.4 58.68 63.78 101.26 62.4 112.37 62.4 62.89.05 114.85-60.86 89.61-130.19.02-3.89-16.82-38.9-16.82-39.58z"
+        />
+      </Svg>
     </Wrapper>
   );
 }
