@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { motion, useMotionValue } from "framer-motion";
+import { motion, useMotionValue, useTransform } from "framer-motion";
 import { useEffect, useRef } from "react";
 
 //framer motion 설치
@@ -77,11 +77,22 @@ const boxVariants = {
 // style x 좌표가 바뀔 떄마다 Motionvalue x 값 업데이트됨
 // motionvalue는 state가 아니다 값이 바뀌어도 재랜더링 되지 않음
 // x.set(값)-> useMotionValue을 업데이트, x.get()-> useMotionValue 읽어 옴
+
+// x 값이 -800 일때 sacle 2를 받고 싶고, x 값이 0 일땐 1, 800일떈 0
+// 점진적으로 다 얻고 싶음 => transformation
+// 그래서 사용하는거 useTransform
+// input과 output은 반드시 같은 배열 크기를 가져야 함
 function App() {
   const x = useMotionValue(0);
+  const scale = useTransform(x, [-800, 0, 800], [2, 1, 0.1]);
+
+  useEffect(() => {
+    // x.onChange(()=>console.log(x.get()))
+    scale.onChange(() => console.log(scale.get()));
+  }, [x]);
   return (
     <Wrapper>
-      <Box style={{ x: x }} drag="x" dragSnapToOrigin />
+      <Box style={{ x, scale }} drag="x" dragSnapToOrigin />
     </Wrapper>
   );
 }
